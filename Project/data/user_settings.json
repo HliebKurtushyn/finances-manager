@@ -1,0 +1,5 @@
+{
+   "auto_login": false,
+   "default_currency": "EUR",
+   "transactions_without_password": false
+}
