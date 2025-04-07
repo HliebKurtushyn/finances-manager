@@ -17,7 +17,7 @@ def generate_transaction_id(transactions_db: dict, receiver_username: str) -> in
         if transaction_id not in transactions_db.get(receiver_username, {}).get("incoming", {}):
             return transaction_id
 
-def add_transaction(transactions_db: dict, sender_username: str, receiver_username: str, amount: float, *category: str) -> int: # Tested
+def add_transaction(transactions_db: dict, sender_username: str, receiver_username: str, amount: float, category="N/A") -> int: # Tested
     transaction_id = generate_transaction_id(transactions_db, receiver_username)
 
     if not category: category = "N/A"
@@ -43,19 +43,7 @@ def add_transaction(transactions_db: dict, sender_username: str, receiver_userna
     save_transactions(transactions_db)
     return transaction_id
 
-def see_transactions_list(transactions_db: dict, username: str) -> str or None: # Tested
-    while True:
-        transaction_type_input = input("Incoming - 0\nOutgoing - 1\n ").strip()
-
-        if transaction_type_input == "0":
-            transaction_type = "incoming"
-            break
-        elif transaction_type_input == "1":
-            transaction_type = "outgoing"
-            break
-        else:
-            print("Invalid input. Please enter 0 for incoming or 1 for outgoing.")
-
+def view_transactions(transactions_db: dict, username: str, transaction_type: str) -> str or None: # Tested
     user_transactions = transactions_db.get(username, {})
     if user_transactions == {}:
         print("User not found or no transactions available.")
@@ -78,3 +66,74 @@ def see_transactions_list(transactions_db: dict, username: str) -> str or None: 
 
     print("\n".join(result))
     return
+
+def edit_transaction(transactions_db: dict, username: str): # Tested
+    view_transactions(transactions_db, username, 'incoming')
+    view_transactions(transactions_db, username, 'outgoing')
+
+
+    tid = input("\nEnter transaction ID you want to edit (0 to exit):\n")
+    if tid == "0":
+        print("Exit...")
+        return
+
+    transaction_type = None
+    if tid in transactions_db[username]["incoming"]:
+        transaction_type = "incoming"
+    elif tid in transactions_db[username]["outgoing"]:
+        transaction_type = "outgoing"
+    else:
+        print(f"No transaction with ID {tid} found.")
+        return
+
+    transaction = transactions_db[username][transaction_type][tid]
+
+    print("\nEnter new values. If you want to leave a field unchanged, just press Enter.")
+    sender = input(f"Sender [{transaction.get('sender', '')}]: ").strip()
+    receiver = input(f"Receiver [{transaction.get('receiver', '')}]: ").strip()
+    category = input(f"Category [{transaction.get('category', '')}]: ").strip()
+    date = input(f"Date [{transaction.get('date', '')}]: ").strip()
+
+    if sender:
+        transaction["sender"] = sender
+    if receiver:
+        transaction["receiver"] = receiver
+    if category:
+        transaction["category"] = category
+    if date:
+        transaction["date"] = date
+
+    dump_to_json('transactions', transactions_db)
+    print("\nTransaction updated successfully!")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
