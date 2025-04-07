@@ -6,7 +6,7 @@
             "sender": "gleb",
             "receiver": "sasha",
             "amount": 50.0,
-            "category": "food",
+            "category": "smth else",
             "date": "2025-04-07 17:11:49"
          },
          "85597": {
@@ -15,6 +15,20 @@
             "amount": 50.0,
             "category": "N/A",
             "date": "2025-04-07 18:20:04"
+         },
+         "14143": {
+            "sender": "gleb",
+            "receiver": "sasha",
+            "amount": 1.0,
+            "category": "smth",
+            "date": "2025-04-07 18:24:13"
+         },
+         "57292": {
+            "sender": "gleb",
+            "receiver": "sasha",
+            "amount": 1.0,
+            "category": "ahh",
+            "date": "2025-04-07 18:26:35"
          }
       }
    },
@@ -33,6 +47,22 @@
             "amount": 50.0,
             "category": "N/A",
             "date": "2025-04-07 18:20:04"
+         },
+         "14143": {
+            "sender": "gleb",
+            "receiver": "sasha",
+            "amount": 1.0,
+            "category": [
+               "smth"
+            ],
+            "date": "2025-04-07 18:24:13"
+         },
+         "57292": {
+            "sender": "gleb",
+            "receiver": "sasha",
+            "amount": 1.0,
+            "category": "ahh",
+            "date": "2025-04-07 18:26:35"
          }
       },
       "outgoing": {}
