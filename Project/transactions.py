@@ -1,6 +1,6 @@
 from hashlib import sha256
 from json_funcs import dump_to_json
-from finances import add_transaction
+from finances import view_transactions
 
 def check_login(logged: bool) -> bool: # Tested
     return logged
@@ -117,9 +117,9 @@ def transaction(currencies_db: dict, users_db: dict, balances_db: dict, users_ca
     add_category = True if input("Do you want to add a category to this transaction?\n 1 - Yes\n Else - No\n") == "1" else False
     if add_category:
         category = input("Enter a name of category you want to add: ")
-        add_transaction(transactions_db, username, receiver_username, amount, category)
+        view_transactions(transactions_db, username, receiver_username, amount, category)
     else:
-        add_transaction(transactions_db, username, receiver_username, amount)
+        view_transactions(transactions_db, username, receiver_username, amount)
 
     dump_to_json('balances', balances_db)
     dump_to_json('transactions', transactions_db)
