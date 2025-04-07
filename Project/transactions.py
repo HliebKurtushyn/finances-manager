@@ -1,5 +1,6 @@
 from hashlib import sha256
 from json_funcs import dump_to_json
+from finances import add_transaction
 
 def check_login(logged: bool) -> bool: # Tested
     return logged
@@ -20,7 +21,7 @@ def transfer_to_users_currency(currencies_db: dict, balances_db: dict, users_car
     currency_rate = currencies_db.get(users_currency, 1)
     return f"{users_balance / currency_rate:.2f}"
 
-def transaction(currencies_db: dict, users_db: dict, balances_db: dict, users_card: str, username: str, logged: bool, safe_transactions: bool, users_currency: str, users_details_db: dict) -> bool: # Tested
+def transaction(currencies_db: dict, users_db: dict, balances_db: dict, users_card: str, username: str, logged: bool, safe_transactions: bool, users_currency: str, users_details_db: dict, transactions_db: dict) -> bool:
     if not check_login(logged):
         return False
 
@@ -30,6 +31,7 @@ def transaction(currencies_db: dict, users_db: dict, balances_db: dict, users_ca
             break
 
     receiver_card = None
+    receiver_username = None
 
     if transaction_type == "1":
         while True:
@@ -41,7 +43,11 @@ def transaction(currencies_db: dict, users_db: dict, balances_db: dict, users_ca
                 print("Receiver not found!")
                 continue
 
-            print(f"User found: {users_details_db.get('credit_cards', {}).get(receiver_card, 'Unknown user')}")
+            receiver_username = users_details_db.get('credit_cards', {}).get(receiver_card)
+            if not receiver_username:
+                print("Receiver username not found!")
+                continue
+            print(f"User found: {receiver_username}")
             break
 
     else:
@@ -108,6 +114,15 @@ def transaction(currencies_db: dict, users_db: dict, balances_db: dict, users_ca
     balances_db[users_card] = balances_db.get(users_card, 0) - amount
     balances_db[receiver_card] = balances_db.get(receiver_card, 0) + amount
 
+    add_category = True if input("Do you want to add a category to this transaction?\n 1 - Yes\n Else - No\n") == 1 else False
+    if add_category:
+        category = input("Enter a name of category you want to add: ")
+        add_transaction(transactions_db, username, receiver_username, amount, category)
+    else:
+        add_transaction(transactions_db, username, receiver_username, amount)
+
     dump_to_json('balances', balances_db)
+    dump_to_json('transactions', transactions_db)
+
     print(f"Transaction successful! You sent {amount:.2f} EUR to {receiver_card}")
     return True
