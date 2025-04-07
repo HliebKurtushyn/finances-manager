@@ -114,7 +114,7 @@ def transaction(currencies_db: dict, users_db: dict, balances_db: dict, users_ca
     balances_db[users_card] = balances_db.get(users_card, 0) - amount
     balances_db[receiver_card] = balances_db.get(receiver_card, 0) + amount
 
-    add_category = True if input("Do you want to add a category to this transaction?\n 1 - Yes\n Else - No\n") == 1 else False
+    add_category = True if input("Do you want to add a category to this transaction?\n 1 - Yes\n Else - No\n") == "1" else False
     if add_category:
         category = input("Enter a name of category you want to add: ")
         add_transaction(transactions_db, username, receiver_username, amount, category)
