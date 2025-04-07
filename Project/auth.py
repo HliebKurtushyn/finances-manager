@@ -20,7 +20,6 @@ def check_password(password: str) -> str or bool:  # Tested
 
     return True
 
-
 def register(username: str, password: str, users: dict) -> bool:  # Tested
     if username in users:
         print("User already exists!")
