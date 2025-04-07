@@ -1,10 +1,40 @@
 {
-  "gleb": {
-    "incoming": {},
-    "outgoing": {}
-  },
-  "sasha": {
-    "incoming": {},
-    "outgoing": {}
-  }
+   "gleb": {
+      "incoming": {},
+      "outgoing": {
+         "94387": {
+            "sender": "gleb",
+            "receiver": "sasha",
+            "amount": 50.0,
+            "category": "food",
+            "date": "2025-04-07 17:11:49"
+         },
+         "85597": {
+            "sender": "gleb",
+            "receiver": "sasha",
+            "amount": 50.0,
+            "category": "N/A",
+            "date": "2025-04-07 18:20:04"
+         }
+      }
+   },
+   "sasha": {
+      "incoming": {
+         "94387": {
+            "sender": "gleb",
+            "receiver": "sasha",
+            "amount": 50.0,
+            "category": "food",
+            "date": "2025-04-07 17:11:49"
+         },
+         "85597": {
+            "sender": "gleb",
+            "receiver": "sasha",
+            "amount": 50.0,
+            "category": "N/A",
+            "date": "2025-04-07 18:20:04"
+         }
+      },
+      "outgoing": {}
+   }
 }
