@@ -1,6 +1,8 @@
 from hashlib import sha256
+
+from Project.json_funcs import load_from_json
 from json_funcs import dump_to_json
-from finances import view_transactions
+from finances import view_transactions, add_transaction
 
 def check_login(logged: bool) -> bool: # Tested
     return logged
@@ -114,15 +116,16 @@ def transaction(currencies_db: dict, users_db: dict, balances_db: dict, users_ca
     balances_db[users_card] = balances_db.get(users_card, 0) - amount
     balances_db[receiver_card] = balances_db.get(receiver_card, 0) + amount
 
+    categories_db = load_from_json('categories')
     add_category = True if input("Do you want to add a category to this transaction?\n 1 - Yes\n Else - No\n") == "1" else False
+
     if add_category:
         category = input("Enter a name of category you want to add: ")
-        view_transactions(transactions_db, username, receiver_username, amount, category)
+        add_transaction(transactions_db, username, receiver_username, amount, category)
     else:
-        view_transactions(transactions_db, username, receiver_username, amount)
+        add_transaction(transactions_db, username, receiver_username, amount)
 
     dump_to_json('balances', balances_db)
-    dump_to_json('transactions', transactions_db)
 
     print(f"Transaction successful! You sent {amount:.2f} EUR to {receiver_card}")
     return True
