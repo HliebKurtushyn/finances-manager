@@ -14,3 +14,5 @@ safe_transactions = True
 users_currency = 'EUR'
 users_details_db = load_from_json('users_details')
 transactions_db = load_from_json('transactions')
+
+transaction(currencies_db, users_db, balances_db, users_card, username, logged, safe_transactions, users_currency, users_details_db, transactions_db)
