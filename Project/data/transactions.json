@@ -29,6 +29,30 @@
             "amount": 1.0,
             "category": "ahh",
             "date": "2025-04-07 18:26:35"
+         },
+         "86503": {
+            "sender": "gleb",
+            "receiver": "sasha",
+            "amount": 5.0,
+            "category": "Games",
+            "date": "2025-04-08 12:24:13"
+         },
+         "77902": {
+            "sender": "gleb",
+            "receiver": "sasha",
+            "amount": 1.0,
+            "category": {
+               "budget": null,
+               "summary": 0
+            },
+            "date": "2025-04-08 12:46:57"
+         },
+         "33026": {
+            "sender": "gleb",
+            "receiver": "sasha",
+            "amount": 1.0,
+            "category": "Games",
+            "date": "2025-04-08 12:50:18"
          }
       }
    },
@@ -63,6 +87,30 @@
             "amount": 1.0,
             "category": "ahh",
             "date": "2025-04-07 18:26:35"
+         },
+         "86503": {
+            "sender": "gleb",
+            "receiver": "sasha",
+            "amount": 5.0,
+            "category": "Games",
+            "date": "2025-04-08 12:24:13"
+         },
+         "77902": {
+            "sender": "gleb",
+            "receiver": "sasha",
+            "amount": 1.0,
+            "category": {
+               "budget": null,
+               "summary": 0
+            },
+            "date": "2025-04-08 12:46:57"
+         },
+         "33026": {
+            "sender": "gleb",
+            "receiver": "sasha",
+            "amount": 1.0,
+            "category": "Games",
+            "date": "2025-04-08 12:50:18"
          }
       },
       "outgoing": {}
