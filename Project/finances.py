@@ -1,12 +1,6 @@
 import datetime
-from json_funcs import dump_to_json, load_from_json
+from json_funcs import dump_to_json
 from random import randint
-
-def load_transactions(): # Tested
-    try:
-        load_from_json('transactions')
-    except FileNotFoundError:
-        return {}
 
 def save_transactions(transactions_db: dict): # Tested
     dump_to_json('transactions', transactions_db)
@@ -19,8 +13,6 @@ def generate_transaction_id(transactions_db: dict, receiver_username: str) -> in
 
 def add_transaction(transactions_db: dict, sender_username: str, receiver_username: str, amount: float, category="N/A") -> int: # Tested
     transaction_id = generate_transaction_id(transactions_db, receiver_username)
-
-    if not category: category = "N/A"
 
     current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -41,6 +33,7 @@ def add_transaction(transactions_db: dict, sender_username: str, receiver_userna
     transactions_db[receiver_username]["incoming"][transaction_id] = transaction_data
 
     save_transactions(transactions_db)
+
     return transaction_id
 
 def view_transactions(transactions_db: dict, username: str, transaction_type: str) -> str or None: # Tested
