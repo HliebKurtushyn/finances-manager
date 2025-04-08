@@ -1,0 +1,32 @@
+Monday: Financial Management ✅
+    Implement and test adding income and expenses in finances.py. ✅
+    Add functionality to edit transactions. ✅
+    Ensure the total balance is calculated correctly. ✅
+    Test error handling for invalid inputs (e.g., negative amounts). ✅
+
+❌--- WILL BE NOT IN THE MAIN PROJECT, WILL BE ADDED LATER---❌
+Budgeting and Analytics
+    Implement budget management in budget.py:
+    Allow users to set budgets for categories.
+    Add notifications for budget exceedance.
+    Create basic financial reports in reports.py:
+    Weekly and monthly summaries of transactions.
+    Categorized expense breakdowns.
+❌--- WILL BE NOT IN THE MAIN PROJECT, WILL BE ADDED LATER---❌
+
+Wednesday: User Interface and CLI
+    Test the command-line interface in main.py:
+    Add commands for viewing balances, adding transactions, and generating reports.
+    Ensure all commands work as expected.
+    Add user prompts for missing settings (e.g., default currency).
+    Test the flow of the program from start to finish.
+
+Thursday: Final Testing and Optimization
+    Perform unit testing for all major functions (e.g., transactions, currency conversion, etc.).
+    Test error handling for edge cases (e.g., invalid inputs, missing files).
+    Optimize code for readability and performance.
+    Ensure all JSON files (users.json, balances.json, etc.) are updated correctly.
+    Create a backup of all data files (settings.json, transactions.json, etc.).
+    Finalize and document the project (e.g., add comments, README file).
+
+This checklist simplifies the tasks while ensuring all critical functionality is covered. Let me know if you need further clarification on any step!
