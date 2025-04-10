@@ -1,7 +1,7 @@
 from hashlib import sha256
 from json_funcs import dump_to_json, load_from_json
 
-def check_password(password: str) -> str or bool:  # Tested
+def check_password(password: str) -> str | bool:
     special_symbols = "@#$%&*!?^~_+=<>/\\|{}"
 
     try:
@@ -11,8 +11,8 @@ def check_password(password: str) -> str or bool:  # Tested
             return 'There must be at least one number!'
         if not any(char.isalpha() for char in password):
             return 'There must be at least one letter!'
-        if not any(char.islower() for char in password) and not any(char.isupper() for char in password):
-            return 'There must be at least one lower and upper case letter!'
+        if not any(char.islower() for char in password) or not any(char.isupper() for char in password):
+            return 'There must be at least one lower and one upper case letter!'
         if not any(char in special_symbols for char in password):
             return 'There must be at least one special symbol!'
     except Exception as e:
@@ -20,7 +20,7 @@ def check_password(password: str) -> str or bool:  # Tested
 
     return True
 
-def register(username: str, password: str, users: dict) -> bool:  # Tested
+def register(username: str, password: str, users: dict) -> bool:
     if username in users:
         print("User already exists!")
         return False
@@ -34,7 +34,6 @@ def register(username: str, password: str, users: dict) -> bool:  # Tested
         print(valid_password)
         return False
 
-
 def login(username: str, password: str, users: dict) -> bool:
     if username not in users:
         print("User is not found!")
@@ -47,7 +46,6 @@ def login(username: str, password: str, users: dict) -> bool:
         print("Invalid password!")
         return False
 
-
 def setup_user_settings():
     user_settings = load_from_json('user_settings')
 
@@ -55,25 +53,28 @@ def setup_user_settings():
         nonlocal user_settings
 
         if not user_settings:
-            while True:
-                auto_login = input("Do you want to auto login next time? (0 - Yes | Else - No):\n") == '0'
-                break
+            auto_login = input("Do you want to auto login next time? (0 - Yes | Else - No):\n") == '0'
+
+            print("Please, select your default currency:")
+            for currency, rate in currencies_db.items():
+                print(f"    {currency}:   {rate} UAH")
 
             while True:
-                print("Please, select your default currency:")
-                for currency, rate in currencies_db.items():
-                    print(f"    {currency}:   {rate} UAH")
                 default_currency = input()
                 if default_currency in currencies_db:
                     break
+                else:
+                    print("Invalid currency. Please try again:")
 
-            while True:
-                safe_transactions = input(
-                    "Do you want to make transactions without entering password? (not safe): (0 - Yes | Else - No)\n") == '0'
-                break
+            safe_transactions = input(
+                "Do you want to make transactions without entering password? (not safe): (0 - Yes | Else - No)\n"
+            ) == '0'
 
-            user_settings = {'auto_login': auto_login, "default_currency": default_currency,
-                             'transactions_without_password': safe_transactions}
+            user_settings = {
+                'auto_login': auto_login,
+                'default_currency': default_currency,
+                'transactions_without_password': safe_transactions
+            }
             dump_to_json('user_settings', user_settings)
 
         return user_settings

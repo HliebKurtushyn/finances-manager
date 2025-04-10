@@ -2,16 +2,16 @@ import datetime
 from json_funcs import dump_to_json
 from random import randint
 
-def save_transactions(transactions_db: dict): # Tested
+def save_transactions(transactions_db: dict):
     dump_to_json('transactions', transactions_db)
 
-def generate_transaction_id(transactions_db: dict, receiver_username: str) -> int: # Tested
+def generate_transaction_id(transactions_db: dict, receiver_username: str) -> int:
     while True:
-        transaction_id = randint(1, 100000)
+        transaction_id = randint(1, 100_000)
         if transaction_id not in transactions_db.get(receiver_username, {}).get("incoming", {}):
             return transaction_id
 
-def add_transaction(transactions_db: dict, sender_username: str, receiver_username: str, amount: float, category="N/A") -> int: # Tested
+def add_transaction(transactions_db: dict, sender_username: str, receiver_username: str, amount: float, category="N/A") -> int:
     transaction_id = generate_transaction_id(transactions_db, receiver_username)
 
     current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -24,27 +24,24 @@ def add_transaction(transactions_db: dict, sender_username: str, receiver_userna
         "date": current_time
     }
 
-    if sender_username not in transactions_db:
-        transactions_db[sender_username] = {"incoming": {}, "outgoing": {}}
-    if receiver_username not in transactions_db:
-        transactions_db[receiver_username] = {"incoming": {}, "outgoing": {}}
+    for user in (sender_username, receiver_username):
+        if user not in transactions_db:
+            transactions_db[user] = {"incoming": {}, "outgoing": {}}
 
     transactions_db[sender_username]["outgoing"][transaction_id] = transaction_data
     transactions_db[receiver_username]["incoming"][transaction_id] = transaction_data
 
     save_transactions(transactions_db)
-
     return transaction_id
 
-def view_transactions(transactions_db: dict, username: str, transaction_type: str) -> str or None: # Tested
-    user_transactions = transactions_db.get(username, {})
-    if user_transactions == {}:
+def view_transactions(transactions_db: dict, username: str, transaction_type: str) -> str | None:
+    user_transactions = transactions_db.get(username)
+    if not user_transactions:
         print("User not found or no transactions available.")
         return
 
     transactions_data = user_transactions.get(transaction_type, {})
-
-    if transactions_data == {}:
+    if not transactions_data:
         print(f"No {transaction_type} transactions found.")
         return
 
@@ -52,28 +49,37 @@ def view_transactions(transactions_db: dict, username: str, transaction_type: st
     for tid, details in transactions_data.items():
         sender = details.get("sender", "N/A")
         receiver = details.get("receiver", "N/A")
-        amount = details.get("amount", "N/A")
+        amount = details.get("amount", 0.0)
         category = details.get("category", "N/A")
         date = details.get("date", "N/A")
-        result.append(f"ID: {tid} | Sender: {sender} | Receiver: {receiver} | Amount: {amount:.2f} EUR | Category: {category} | Date: {date}")
+
+        result.append(
+            f"ID: {tid} | Sender: {sender} | Receiver: {receiver} | "
+            f"Amount: {amount:.2f} EUR | Category: {category} | Date: {date}"
+        )
 
     print("\n".join(result))
     return
 
-def edit_transaction(transactions_db: dict, username: str): # Tested
+def edit_transaction(transactions_db: dict, username: str):
     view_transactions(transactions_db, username, 'incoming')
     view_transactions(transactions_db, username, 'outgoing')
-
 
     tid = input("\nEnter transaction ID you want to edit (0 to exit):\n")
     if tid == "0":
         print("Exit...")
         return
 
+    try:
+        tid = int(tid)
+    except ValueError:
+        print("Transaction ID must be a number.")
+        return
+
     transaction_type = None
-    if tid in transactions_db[username]["incoming"]:
+    if tid in transactions_db.get(username, {}).get("incoming", {}):
         transaction_type = "incoming"
-    elif tid in transactions_db[username]["outgoing"]:
+    elif tid in transactions_db.get(username, {}).get("outgoing", {}):
         transaction_type = "outgoing"
     else:
         print(f"No transaction with ID {tid} found.")
@@ -96,37 +102,5 @@ def edit_transaction(transactions_db: dict, username: str): # Tested
     if date:
         transaction["date"] = date
 
-    dump_to_json('transactions', transactions_db)
+    save_transactions(transactions_db)
     print("\nTransaction updated successfully!")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
