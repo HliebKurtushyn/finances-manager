@@ -47,3 +47,29 @@ def restore_settings() -> bool:
     }
     dump_to_json('settings', default_settings)
     return True
+
+def set_currencies():
+    currencies = {
+      "EUR": 1,
+      "UAH": 0.0225,
+      "USD": 0.917,
+      "PLN": 0.232,
+      "GBP": 1.163,
+      "CZK": 0.0396
+    }
+
+    dump_to_json("currencies", currencies)
+
+
+def set_currencies():
+    currencies = {
+      "EUR": 1,
+      "UAH": 0.0225,
+      "USD": 0.917,
+      "PLN": 0.232,
+      "GBP": 1.163,
+      "CZK": 0.0396
+    }
+
+    dump_to_json("currencies", currencies)
+

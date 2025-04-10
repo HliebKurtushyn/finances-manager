@@ -1,8 +1,9 @@
 from hashlib import sha256
+from json import dump
 from json_funcs import dump_to_json, load_from_json
 
 def check_password(password: str) -> str | bool:
-    special_symbols = "@#$%&*!?^~_+=<>/\\|{}"
+    special_symbols = "@#$%&*!?^~-_+=<>/\\|{}"
 
     try:
         if len(password) < 8:
@@ -34,13 +35,22 @@ def register(username: str, password: str, users: dict) -> bool:
         print(valid_password)
         return False
 
-def login(username: str, password: str, users: dict) -> bool:
-    if username not in users:
+def login(users_db: dict) -> bool:
+    username = input("Enter your username: ")
+    password = input("Enter your password: ")
+
+    if username not in users_db:
         print("User is not found!")
         return False
 
     hashed_password = sha256(password.encode()).hexdigest()
-    if users[username] == hashed_password:
+    if users_db[username] == hashed_password:
+        try:
+            with open('data/is_logged.txt', 'w') as file:
+                file.write(username)
+        except Exception as e:
+            print(f"Error updating login status: {e}")
+            return False
         return True
     else:
         print("Invalid password!")
