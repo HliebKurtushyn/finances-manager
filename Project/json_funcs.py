@@ -1,6 +1,6 @@
 from json import dump, load
-from os import makedirs
-from os.path import exists
+from os import makedirs, remove
+from os.path import exists, join
 
 def dump_to_json(file_name: str, obj: object) -> bool:
     folder = 'data'
@@ -26,6 +26,26 @@ def load_from_json(file_name: str) -> dict:
         if not content:
             return {}
         return load(open(path_to_file, "r", encoding="utf-8"))
+
+def set_data_files():
+    folder = 'data'
+    files = [
+        'users.json',
+        'balances.json',
+        'transactions.json',
+        'currencies.json',
+        'users_details.json',
+        'user_settings.json'
+    ]
+
+    makedirs(folder, exist_ok=True)
+
+    for file in files:
+        path = join(folder, file)
+        if not exists(path):
+            with open(path, 'w') as f:
+                dump({}, f)
+
 
 def create_settings() -> bool:
     path_to_file = 'data/settings.json'
@@ -60,16 +80,16 @@ def set_currencies():
 
     dump_to_json("currencies", currencies)
 
+def save_session(username):
+    dump_to_json("session", {"username": username})
 
-def set_currencies():
-    currencies = {
-      "EUR": 1,
-      "UAH": 0.0225,
-      "USD": 0.917,
-      "PLN": 0.232,
-      "GBP": 1.163,
-      "CZK": 0.0396
-    }
+def load_session():
+    try:
+        data = load_from_json('session')
+        return data.get("username")  # <- це ключовий момент
+    except FileNotFoundError:
+        return None
 
-    dump_to_json("currencies", currencies)
-
+def clear_session():
+    if exists("data/session.json"):
+        remove("data/session.json")

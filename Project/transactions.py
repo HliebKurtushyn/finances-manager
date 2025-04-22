@@ -14,7 +14,7 @@ def request_password(username: str, users_db: dict, logged: bool) -> bool:
     return users_db.get(username) == hashed_password
 
 def transfer_to_users_currency(currencies_db: dict, balances_db: dict, users_card: str, users_currency: str) -> str:
-    users_balance = balances_db.get(users_card, 0)
+    users_balance = float(balances_db.get(users_card, 0))  # Convert balance to float
     if users_currency == "EUR":
         return f"{users_balance:.2f}"
     currency_rate = currencies_db.get(users_currency, 1)
@@ -30,6 +30,10 @@ def transaction(
     if not check_login(logged):
         return False
 
+    if users_card not in balances_db:
+        print("Error: Your card is not found in the balances database!")
+        return False
+
     while True:
         transaction_type = input("What type of transaction do you want to make?\n1 - Transfer to card\n2 - IBAN\n")
         if transaction_type in ("1", "2"):
@@ -39,7 +43,6 @@ def transaction(
     receiver_card = None
     receiver_username = None
 
-    # --- Card transfer ---
     if transaction_type == "1":
         while True:
             receiver_card = input("Enter the recipient's card number: ").replace(" ", "")
@@ -47,18 +50,17 @@ def transaction(
                 print("Invalid card number!")
                 continue
             if receiver_card not in balances_db:
-                print("Receiver not found!")
+                print("Receiver not found in balances!")
                 continue
 
             receiver_username = users_details_db.get('credit_cards', {}).get(receiver_card)
             if not receiver_username:
-                print("Receiver username not found!")
+                print("Receiver username not found in user details!")
                 continue
 
             print(f"User found: {receiver_username}")
             break
 
-    # --- IBAN transfer ---
     else:
         supported_ibans = {
             "AT": 20, "BE": 16, "BG": 22, "CY": 28, "CZ": 24,
@@ -86,14 +88,17 @@ def transaction(
             print(f"User found: {receiver_username}")
             break
 
-    # --- Amount input ---
     while True:
         try:
-            user_balance = balances_db.get(users_card, 0)
+            user_balance = float(balances_db.get(users_card, 0))
             display_balance = transfer_to_users_currency(currencies_db, balances_db, users_card, users_currency)
             print(f"\nYour balance: {display_balance} {users_currency}")
 
-            amount_input = input(f"Enter amount you want to transfer (1 - 50,000 {users_currency}):\n")
+            amount_input = input(f"Enter amount you want to transfer (1 - 50,000 {users_currency}):\n").strip()
+            if not amount_input:
+                print("Amount cannot be empty!")
+                continue
+
             amount = float(amount_input.replace(",", "."))
 
             if not 1 <= amount <= 50000:
@@ -111,7 +116,6 @@ def transaction(
         else:
             break
 
-    # --- Password check---
     if not safe_transactions:
         for attempt in range(5):
             if request_password(username, users_db, logged):
@@ -121,11 +125,9 @@ def transaction(
             print("Too many requests! Try again later!")
             return False
 
-    # --- Balances update ---
     balances_db[users_card] = balances_db.get(users_card, 0) - amount
     balances_db[receiver_card] = balances_db.get(receiver_card, 0) + amount
 
-    # --- Transaction category ---
     add_category = input("Do you want to add a category to this transaction?\n1 - Yes\nElse - No\n") == "1"
     category = None
     if add_category:
