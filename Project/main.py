@@ -14,7 +14,6 @@ def main():
     logged = False
     username = ""
 
-    # Load session if available
     saved_user = load_session()
     if saved_user:
         logged = True
@@ -22,7 +21,6 @@ def main():
         print(f"Auto-logged in as {username}")
         sleep(1)
 
-    # Login or register loop
     while not (logged and username):
         clear()
         print("                     ---Welcome to the Finances Manager App---")
