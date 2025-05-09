@@ -1,0 +1,26 @@
+{
+   "Gleb": {
+      "incoming": {},
+      "outgoing": {
+         "44177": {
+            "sender": "Gleb",
+            "receiver": "Oleh",
+            "amount": 20.0,
+            "category": "Food for poori",
+            "date": "2025-04-22 16:36:02"
+         }
+      }
+   },
+   "Oleh": {
+      "incoming": {
+         "44177": {
+            "sender": "Gleb",
+            "receiver": "Oleh",
+            "amount": 20.0,
+            "category": "Food for poori",
+            "date": "2025-04-22 16:36:02"
+         }
+      },
+      "outgoing": {}
+   }
+}
